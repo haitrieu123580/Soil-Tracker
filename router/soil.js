@@ -2,9 +2,28 @@ const route = require("express").Router();
 const db = require('../firebase/db')
 const admin = require("firebase-admin");
 const phThresHold = 6, moistureThresHold = 6;
+const soilRef = db.collection("soil");
+route.get('/fake-data', async (req, res) => {
+    try {
+        // Loop to create 10 documents
+        for (let i = 1; i <= 10; i++) {
+            // Replace the following properties with the actual data you want to add to each document
+            const data = {
+                PH: 7.0 + Math.random() * 3.0, // Example: random PH value between 7.0 and 10.0
+                moisture: 7.0 + Math.random() * 3.0, // Example: random moisture value between 0 and 100
+                time: admin.firestore.Timestamp.now(), // Current timestamp
+            };
+            await soilRef.doc().set(data);
+        }
+
+        return res.json({message: "10 documents created successfully."});
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 route.get("/week", async (req, res) => {
-    const soilRef = db.collection("soil");
+
 
     // Calculate the start of the week (Monday)
     const currentDate = new Date();
@@ -54,10 +73,9 @@ route.get("/week", async (req, res) => {
     return res.status(200).json({ data: dateData });
 });
 
-route.get('/ph/:id', async (req, res) => {
+route.get('/:id', async (req, res) => {
     try {
         // Use the document ID to get a reference to the specific document
-        const soilRef = db.collection("soil");
         const docRef = soilRef.doc(req.params.id);
         const docSnapshot = await docRef.get();
 

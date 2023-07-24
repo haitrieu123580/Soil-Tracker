@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: true }))
 
 const soilRouter = require('./router/soil');
 const productRouter = require('./router/product')
-app.use('/api/soil/', soilRouter);
+app.use('/api/soil', soilRouter);
 app.use('/api/product/', productRouter);
 
 const port = process.env.PORT || 5000;
