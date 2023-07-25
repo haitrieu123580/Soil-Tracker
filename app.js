@@ -1,7 +1,9 @@
 require('dotenv').config();
-
+const cors = require('cors');
 const express = require('express')
 const app = express()
+// Cấu hình CORS cho phép truy cập từ nguồn gốc khác
+app.use(cors());
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
